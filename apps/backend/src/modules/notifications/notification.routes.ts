@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { notificationController } from './notification.controller.js';
-import { protect } from '../../middleware/auth.middleware.js';
+import { authenticate } from '../../auth/middleware/auth.middleware.js';
 
 const router = Router();
 
 // All routes are protected
-router.use(protect);
+router.use(authenticate);
 
 // Get unread count
 router.get('/unread-count', notificationController.getUnreadCount.bind(notificationController));
@@ -28,4 +28,4 @@ router.delete('/:id', notificationController.deleteNotification.bind(notificatio
 // Create notification (admin/internal use)
 router.post('/', notificationController.createNotification.bind(notificationController));
 
-export default router;
+export { router as notificationRoutes };

@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { analyticsController } from './analytics.controller.js';
-import { protect } from '../../middleware/auth.middleware.js';
+import { authenticate } from '../../auth/middleware/auth.middleware.js';
 
 const router = Router();
 
 // All routes are protected
-router.use(protect);
+router.use(authenticate);
 
 // Get dashboard analytics summary
 router.get('/dashboard', analyticsController.getDashboard.bind(analyticsController));
@@ -19,4 +19,4 @@ router.get('/performance', analyticsController.getPerformance.bind(analyticsCont
 // Calculate and save performance metrics
 router.post('/performance/calculate', analyticsController.calculatePerformance.bind(analyticsController));
 
-export default router;
+export { router as analyticsRoutes };

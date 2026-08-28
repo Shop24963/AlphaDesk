@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { journalController } from './journal.controller.js';
-import { protect } from '../../middleware/auth.middleware.js';
+import { authenticate } from '../../auth/middleware/auth.middleware.js';
 
 const router = Router();
 
 // All routes are protected
-router.use(protect);
+router.use(authenticate);
 
 // Get journal statistics
 router.get('/stats', journalController.getStats.bind(journalController));
@@ -28,4 +28,4 @@ router.put('/:id', journalController.updateEntry.bind(journalController));
 // Delete entry
 router.delete('/:id', journalController.deleteEntry.bind(journalController));
 
-export default router;
+export { router as journalRoutes };

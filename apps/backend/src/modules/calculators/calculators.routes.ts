@@ -21,4 +21,4 @@ router.post('/compound-interest', calculatorsController.calculateCompoundInteres
 // Margin and leverage calculator
 router.post('/margin', calculatorsController.calculateMargin.bind(calculatorsController));
 
-export default router;
+export { router as calculatorRoutes };

@@ -8,4 +8,4 @@ router.get('/swing', screenerController.swingScanner.bind(screenerController));
 router.get('/positional', screenerController.positionalScanner.bind(screenerController));
 router.get('/relative-strength', screenerController.relativeStrength.bind(screenerController));
 
-export default router;
+export { router as screenerRoutes };
