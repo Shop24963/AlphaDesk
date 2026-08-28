@@ -14,6 +14,7 @@ import { journalRoutes } from '@/modules/journal/journal.routes.js';
 import { analyticsRoutes } from '@/modules/analytics/analytics.routes.js';
 import { notificationRoutes } from '@/modules/notifications/notification.routes.js';
 import { calculatorRoutes } from '@/modules/calculators/calculators.routes.js';
+import { aiRoutes } from '@/modules/ai-admin/ai.routes.js';
 
 const router = Router();
 
@@ -26,6 +27,7 @@ router.use('/market', marketRoutes);
 router.use('/stocks', stockRoutes);
 router.use('/screener', screenerRoutes);
 router.use('/calculators', calculatorRoutes);
+router.use('/ai', aiRoutes);
 
 // Protected routes (authentication required in each module)
 router.use('/watchlists', watchlistRoutes);

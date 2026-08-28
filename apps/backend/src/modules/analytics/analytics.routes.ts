@@ -19,4 +19,13 @@ router.get('/performance', analyticsController.getPerformance.bind(analyticsCont
 // Calculate and save performance metrics
 router.post('/performance/calculate', analyticsController.calculatePerformance.bind(analyticsController));
 
+// Get portfolio analytics with risk metrics
+router.get('/portfolio', analyticsController.getPortfolioAnalytics.bind(analyticsController));
+
+// Get analytics history
+router.get('/history', analyticsController.getAnalyticsHistory.bind(analyticsController));
+
+// Save custom analytics
+router.post('/save', analyticsController.saveAnalytics.bind(analyticsController));
+
 export { router as analyticsRoutes };

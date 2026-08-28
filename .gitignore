@@ -1,82 +1,45 @@
 ```
 # Dependencies
 node_modules/
+**/node_modules/
 
-# Build outputs
+# Build artifacts
 dist/
 build/
 target/
 
-# Logs
-*.log
-
 # Environment variables
 .env
 .env.local
-*.env.*
+.env.*
 
-# IDE files
+# IDE and editor files
 .vscode/
 .idea/
 *.swp
 *.swo
 *.tmp
 
-# Python specific
+# Logs
+*.log
+
+# Python cache (if present in project)
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.Python
-env/
-venv/
-.venv/
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.log
-.git/
-.mypy_cache/
-.pytest_cache/
-.hypothesis/
 
-# Node.js specific
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-node_modules/
-dist/
-build/
-*.min.js
-*.min.css
+# Coverage reports
 coverage/
-.nyc_output
-.nyc_output/
-.npm/
-.yarn/
-.pnp.js
-.pnp.cjs
-.next/
-.nuxt/
-.vercel/
+htmlcov/
+.coverage
 
-# TypeScript specific
-*.tsbuildinfo
-*.js.map
-*.ts.map
+# Temporary files
+*.tmp
+.DS_Store
+Thumbs.db
 
-# General build artifacts
-*.o
-*.obj
-*.exe
-*.dll
-*.so
-*.a
-*.out
+# Package lock files (already tracked)
+!package-lock.json
+!yarn.lock
 ```
