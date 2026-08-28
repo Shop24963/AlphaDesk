@@ -26,8 +26,10 @@ const tokenSchema = z.object({
   exp: z.number(),
 });
 
-export function authenticate(
-  req: AuthRequest,
+export const protect = authenticate;
+export const authMiddleware = authenticate;
+
+function authenticate(
   _res: Response,
   next: NextFunction
 ): void {
