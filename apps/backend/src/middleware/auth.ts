@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { SignOptions } from 'jsonwebtoken';
+import { StringValue } from 'ms';
 import { z } from 'zod';
 import { UnauthorizedError, ForbiddenError } from '@/common/errors.js';
 import { env } from '@/config/env.js';
@@ -103,17 +104,19 @@ export function generateAccessToken(payload: {
   email: string;
   role: UserRole;
 }): string {
-  const options: SignOptions = {
-    expiresIn: env.JWT_ACCESS_EXPIRES_IN,
-  };
-  return jwt.sign(payload, env.JWT_ACCESS_SECRET, options);
+  return jwt.sign(
+    { userId: payload.userId, email: payload.email, role: payload.role },
+    env.JWT_ACCESS_SECRET,
+    { expiresIn: env.JWT_ACCESS_EXPIRES_IN as StringValue | number }
+  );
 }
 
 export function generateRefreshToken(payload: { userId: string }): string {
-  const options: SignOptions = {
-    expiresIn: env.JWT_REFRESH_EXPIRES_IN,
-  };
-  return jwt.sign(payload, env.JWT_REFRESH_SECRET, options);
+  return jwt.sign(
+    { userId: payload.userId },
+    env.JWT_REFRESH_SECRET,
+    { expiresIn: env.JWT_REFRESH_EXPIRES_IN as StringValue | number }
+  );
 }
 
 export function verifyRefreshToken(token: string): JWTPayload {
