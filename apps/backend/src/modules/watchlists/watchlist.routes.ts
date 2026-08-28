@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { authMiddleware } from '../../middleware/auth.middleware';
+import { authenticate } from '../../auth/middleware/auth.middleware';
 import { watchlistController } from './watchlist.controller';
 
 const router = Router();
 
 // All routes require authentication
-router.use(authMiddleware);
+router.use(authenticate);
 
 router.post('/', watchlistController.create.bind(watchlistController));
 router.get('/', watchlistController.getAll.bind(watchlistController));
@@ -15,4 +15,4 @@ router.delete('/:id', watchlistController.delete.bind(watchlistController));
 router.post('/:id/symbols', watchlistController.addSymbol.bind(watchlistController));
 router.delete('/:id/symbols', watchlistController.removeSymbol.bind(watchlistController));
 
-export default router;
+export { router as watchlistRoutes };

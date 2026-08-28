@@ -5,25 +5,24 @@ node_modules/
 # Build outputs
 dist/
 build/
-.next/
-out/
+target/
+
+# Logs
+*.log
 
 # Environment variables
 .env
 .env.local
 *.env.*
 
-# Editor/IDE files
+# IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
 *.tmp
 
-# Logs
-*.log
-
-# Python
+# Python specific
 __pycache__/
 *.pyc
 *.pyo
@@ -42,24 +41,42 @@ nosetests.xml
 coverage.xml
 *.cover
 *.log
-.git/modules/
-.DS_Store
-Thumbs.db
+.git/
+.mypy_cache/
+.pytest_cache/
+.hypothesis/
 
-# TypeScript/JavaScript
+# Node.js specific
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+node_modules/
+dist/
+build/
+*.min.js
+*.min.css
+coverage/
+.nyc_output
+.nyc_output/
+.npm/
+.yarn/
+.pnp.js
+.pnp.cjs
+.next/
+.nuxt/
+.vercel/
+
+# TypeScript specific
 *.tsbuildinfo
 *.js.map
-*.jsx.map
 *.ts.map
-*.tsx.map
 
-# Next.js
-.next/
-out/
-```
-
-Wait, looking at the added files again - they're all source code files (.tsx, .ts) and the changes don't include any build artifacts, dependency directories, or temporary files that should be ignored. The only files being added are component and service files which are part of the source code.
-
-```
-
+# General build artifacts
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.out
 ```

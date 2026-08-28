@@ -10,4 +10,4 @@ router.get('/:id', stockController.getById.bind(stockController));
 router.get('/symbol/:symbol/exchange/:exchange', stockController.getBySymbol.bind(stockController));
 router.get('/quote/:symbol/exchange/:exchange', stockController.getQuote.bind(stockController));
 
-export default router;
+export { router as stockRoutes };

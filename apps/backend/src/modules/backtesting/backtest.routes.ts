@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { authMiddleware } from '../../middleware/auth.middleware';
+import { authenticate } from '../../auth/middleware/auth.middleware';
 import { backtestController } from './backtest.controller';
 
 const router = Router();
 
-router.use(authMiddleware);
+router.use(authenticate);
 
 router.post('/', backtestController.create.bind(backtestController));
 router.get('/', backtestController.getAll.bind(backtestController));
@@ -13,4 +13,4 @@ router.put('/:id/status', backtestController.updateStatus.bind(backtestControlle
 router.post('/:id/run', backtestController.run.bind(backtestController));
 router.delete('/:id', backtestController.delete.bind(backtestController));
 
-export default router;
+export { router as backtestRoutes };
