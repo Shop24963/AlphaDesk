@@ -12,11 +12,11 @@ export type EnvConfig = z.infer<typeof envSchema>;
 
 function validateEnv(): EnvConfig {
   const result = envSchema.safeParse({
-    VITE_API_BASE_URL: import.meta.env.VITE_API_BASE_URL,
-    VITE_WS_URL: import.meta.env.VITE_WS_URL,
-    VITE_APP_NAME: import.meta.env.VITE_APP_NAME,
-    VITE_APP_ENV: import.meta.env.VITE_APP_ENV,
-    VITE_ENABLE_ANALYTICS: import.meta.env.VITE_ENABLE_ANALYTICS,
+    VITE_API_BASE_URL: (import.meta as any).env.VITE_API_BASE_URL,
+    VITE_WS_URL: (import.meta as any).env.VITE_WS_URL,
+    VITE_APP_NAME: (import.meta as any).env.VITE_APP_NAME,
+    VITE_APP_ENV: (import.meta as any).env.VITE_APP_ENV,
+    VITE_ENABLE_ANALYTICS: (import.meta as any).env.VITE_ENABLE_ANALYTICS,
   });
 
   if (!result.success) {
