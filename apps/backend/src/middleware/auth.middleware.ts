@@ -29,7 +29,8 @@ const tokenSchema = z.object({
 export const protect = authenticate;
 export const authMiddleware = authenticate;
 
-function authenticate(
+export function authenticate(
+  req: AuthRequest,
   _res: Response,
   next: NextFunction
 ): void {
