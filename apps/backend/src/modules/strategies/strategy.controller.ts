@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
+import { AuthRequest } from '../../middleware/auth.middleware.js';
 import { Strategy } from './strategy.model';
 
 class StrategyController {
-  async create(req: Request, res: Response, next: NextFunction) {
+  async create(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const strategyData = req.body;
 
       const strategy = await Strategy.create({
@@ -21,9 +22,9 @@ class StrategyController {
     }
   }
 
-  async getAll(req: Request, res: Response, next: NextFunction) {
+  async getAll(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const category = req.query.category as string;
       const type = req.query.type as string;
       const isActive = req.query.isActive !== undefined ? req.query.isActive === 'true' : undefined;
@@ -60,10 +61,10 @@ class StrategyController {
     }
   }
 
-  async getById(req: Request, res: Response, next: NextFunction) {
+  async getById(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const strategy = await Strategy.findOne({
         _id: id,
@@ -86,10 +87,10 @@ class StrategyController {
     }
   }
 
-  async update(req: Request, res: Response, next: NextFunction) {
+  async update(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const updateData = req.body;
 
       const strategy = await Strategy.findOne({ _id: id, user: userId });
@@ -115,10 +116,10 @@ class StrategyController {
     }
   }
 
-  async delete(req: Request, res: Response, next: NextFunction) {
+  async delete(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const strategy = await Strategy.findOneAndDelete({ _id: id, user: userId });
 
@@ -138,10 +139,10 @@ class StrategyController {
     }
   }
 
-  async toggle(req: Request, res: Response, next: NextFunction) {
+  async toggle(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const strategy = await Strategy.findOne({ _id: id, user: userId });
       if (!strategy) {
@@ -166,7 +167,7 @@ class StrategyController {
   async updateBacktestStats(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const backtestStats = req.body;
 
       const strategy = await Strategy.findOne({ _id: id, user: userId });

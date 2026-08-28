@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
+import { AuthRequest } from '../../middleware/auth.middleware.js';
 import { Portfolio } from './portfolio.model';
 import { Transaction } from './transaction.model';
 
 class PortfolioController {
-  async create(req: Request, res: Response, next: NextFunction) {
+  async create(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const { name, description, type, totalValue } = req.body;
 
       const portfolio = await Portfolio.create({
@@ -26,9 +27,9 @@ class PortfolioController {
     }
   }
 
-  async getAll(req: Request, res: Response, next: NextFunction) {
+  async getAll(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const type = req.query.type as string;
 
       const query: any = { user: userId };
@@ -47,10 +48,10 @@ class PortfolioController {
     }
   }
 
-  async getById(req: Request, res: Response, next: NextFunction) {
+  async getById(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const portfolio = await Portfolio.findOne({ _id: id, user: userId }).populate('transactions');
 
@@ -70,10 +71,10 @@ class PortfolioController {
     }
   }
 
-  async update(req: Request, res: Response, next: NextFunction) {
+  async update(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const updateData = req.body;
 
       const portfolio = await Portfolio.findOneAndUpdate(
@@ -98,10 +99,10 @@ class PortfolioController {
     }
   }
 
-  async delete(req: Request, res: Response, next: NextFunction) {
+  async delete(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const portfolio = await Portfolio.findOneAndDelete({ _id: id, user: userId });
 
@@ -127,7 +128,7 @@ class PortfolioController {
   async getTransactions(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 20;
 
@@ -164,7 +165,7 @@ class PortfolioController {
   async addTransaction(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const transactionData = req.body;
 
       const portfolio = await Portfolio.findOne({ _id: id, user: userId });

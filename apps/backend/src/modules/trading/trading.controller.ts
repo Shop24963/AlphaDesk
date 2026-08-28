@@ -1,12 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
+import { AuthRequest } from '../../middleware/auth.middleware.js';
 import { PaperAccount } from './paper-account.model';
 import { Trade } from './trade.model';
 import { marketDataProvider } from '../market/market.provider';
 
 class TradingController {
-  async createAccount(req: Request, res: Response, next: NextFunction) {
+  async createAccount(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const { name, description, initialBalance } = req.body;
 
       const account = await PaperAccount.create({
@@ -31,9 +32,9 @@ class TradingController {
     }
   }
 
-  async getAccounts(req: Request, res: Response, next: NextFunction) {
+  async getAccounts(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const accounts = await PaperAccount.find({ user: userId }).sort({ createdAt: -1 });
 
@@ -46,10 +47,10 @@ class TradingController {
     }
   }
 
-  async getAccountById(req: Request, res: Response, next: NextFunction) {
+  async getAccountById(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const account = await PaperAccount.findOne({ _id: id, user: userId });
 
@@ -69,10 +70,10 @@ class TradingController {
     }
   }
 
-  async placeOrder(req: Request, res: Response, next: NextFunction) {
+  async placeOrder(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { accountId } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const orderData = req.body;
 
       const account = await PaperAccount.findOne({ _id: accountId, user: userId });
@@ -191,10 +192,10 @@ class TradingController {
     await account.save();
   }
 
-  async getOrders(req: Request, res: Response, next: NextFunction) {
+  async getOrders(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { accountId } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const status = req.query.status as string;
 
       const account = await PaperAccount.findOne({ _id: accountId, user: userId });
@@ -221,10 +222,10 @@ class TradingController {
     }
   }
 
-  async cancelOrder(req: Request, res: Response, next: NextFunction) {
+  async cancelOrder(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { accountId, orderId } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const account = await PaperAccount.findOne({ _id: accountId, user: userId });
       if (!account) {
@@ -261,10 +262,10 @@ class TradingController {
     }
   }
 
-  async updateHoldings(req: Request, res: Response, next: NextFunction) {
+  async updateHoldings(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { accountId } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const account = await PaperAccount.findOne({ _id: accountId, user: userId });
       if (!account) {

@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
+import { AuthRequest } from '../../middleware/auth.middleware.js';
 import { Backtest } from './backtest.model';
 import { Strategy } from '../strategies/strategy.model';
 
 class BacktestController {
-  async create(req: Request, res: Response, next: NextFunction) {
+  async create(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const { strategyId, name, description, settings } = req.body;
 
       // Verify strategy ownership
@@ -35,9 +36,9 @@ class BacktestController {
     }
   }
 
-  async getAll(req: Request, res: Response, next: NextFunction) {
+  async getAll(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const status = req.query.status as string;
       const strategyId = req.query.strategyId as string;
 
@@ -64,10 +65,10 @@ class BacktestController {
     }
   }
 
-  async getById(req: Request, res: Response, next: NextFunction) {
+  async getById(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const backtest = await Backtest.findOne({ _id: id, user: userId })
         .populate('strategy', 'name category rules indicators');
@@ -88,10 +89,10 @@ class BacktestController {
     }
   }
 
-  async updateStatus(req: Request, res: Response, next: NextFunction) {
+  async updateStatus(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const { status, error, results, trades, equityCurve } = req.body;
 
       const backtest = await Backtest.findOne({ _id: id, user: userId });
@@ -126,10 +127,10 @@ class BacktestController {
     }
   }
 
-  async delete(req: Request, res: Response, next: NextFunction) {
+  async delete(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const backtest = await Backtest.findOneAndDelete({ _id: id, user: userId });
 
@@ -149,10 +150,10 @@ class BacktestController {
     }
   }
 
-  async run(req: Request, res: Response, next: NextFunction) {
+  async run(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const backtest = await Backtest.findOne({ _id: id, user: userId });
       if (!backtest) {

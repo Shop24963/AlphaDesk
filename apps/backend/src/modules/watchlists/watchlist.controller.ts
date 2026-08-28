@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
+import { AuthRequest } from '../../middleware/auth.middleware.js';
 import { Watchlist } from './watchlist.model';
 
 class WatchlistController {
-  async create(req: Request, res: Response, next: NextFunction) {
+  async create(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { name, description, symbols } = req.body;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const existingWatchlist = await Watchlist.findOne({ user: userId, name });
       if (existingWatchlist) {
@@ -31,9 +32,9 @@ class WatchlistController {
     }
   }
 
-  async getAll(req: Request, res: Response, next: NextFunction) {
+  async getAll(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const watchlists = await Watchlist.find({ user: userId }).sort({ isDefault: -1, createdAt: -1 });
 
       res.json({
@@ -45,10 +46,10 @@ class WatchlistController {
     }
   }
 
-  async getById(req: Request, res: Response, next: NextFunction) {
+  async getById(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const watchlist = await Watchlist.findOne({ _id: id, user: userId });
       if (!watchlist) {
@@ -67,11 +68,11 @@ class WatchlistController {
     }
   }
 
-  async update(req: Request, res: Response, next: NextFunction) {
+  async update(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
       const { name, description, symbols } = req.body;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const watchlist = await Watchlist.findOne({ _id: id, user: userId });
       if (!watchlist) {
@@ -106,10 +107,10 @@ class WatchlistController {
     }
   }
 
-  async delete(req: Request, res: Response, next: NextFunction) {
+  async delete(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const watchlist = await Watchlist.findOne({ _id: id, user: userId });
       if (!watchlist) {
@@ -141,7 +142,7 @@ class WatchlistController {
     try {
       const { id } = req.params;
       const { symbol } = req.body;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const watchlist = await Watchlist.findOne({ _id: id, user: userId });
       if (!watchlist) {
@@ -169,7 +170,7 @@ class WatchlistController {
     try {
       const { id } = req.params;
       const { symbol } = req.body;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const watchlist = await Watchlist.findOne({ _id: id, user: userId });
       if (!watchlist) {

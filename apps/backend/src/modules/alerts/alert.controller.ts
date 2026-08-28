@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { Alert } from './alert.model';
+import { AuthRequest } from '../../middleware/auth.middleware.js';
 
 class AlertController {
-  async create(req: Request, res: Response, next: NextFunction) {
+  async create(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const alertData = req.body;
 
       const alert = await Alert.create({
@@ -21,9 +22,9 @@ class AlertController {
     }
   }
 
-  async getAll(req: Request, res: Response, next: NextFunction) {
+  async getAll(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const isActive = req.query.isActive !== undefined ? req.query.isActive === 'true' : undefined;
 
       const query: any = { user: userId };
@@ -42,10 +43,10 @@ class AlertController {
     }
   }
 
-  async update(req: Request, res: Response, next: NextFunction) {
+  async update(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
       const updateData = req.body;
 
       const alert = await Alert.findOneAndUpdate(
@@ -70,10 +71,10 @@ class AlertController {
     }
   }
 
-  async delete(req: Request, res: Response, next: NextFunction) {
+  async delete(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const alert = await Alert.findOneAndDelete({ _id: id, user: userId });
 
@@ -93,10 +94,10 @@ class AlertController {
     }
   }
 
-  async toggle(req: Request, res: Response, next: NextFunction) {
+  async toggle(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const userId = req.user!.id;
+      const userId = req.user!.userId;
 
       const alert = await Alert.findOne({ _id: id, user: userId });
       if (!alert) {
@@ -130,7 +131,7 @@ class AlertController {
         });
       }
 
-      if (!alert.shouldNotify()) {
+      if (!(alert as any).shouldNotify()) {
         return res.status(400).json({
           success: false,
           message: 'Alert cannot be triggered',
