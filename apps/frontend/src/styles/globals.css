@@ -156,11 +156,11 @@
   }
 
   .status-badge-success {
-    @apply bg-[color:var(--profit)]/10 text-[color:var(--profit)];
+    @apply bg-green-500/10 text-green-600;
   }
 
   .status-badge-danger {
-    @apply bg-[color:var(--loss)]/10 text-[color:var(--loss)];
+    @apply bg-red-500/10 text-red-600;
   }
 
   .status-badge-warning {

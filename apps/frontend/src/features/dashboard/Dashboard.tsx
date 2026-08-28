@@ -1,8 +1,8 @@
 import { PageHeader, SectionHeader } from '@/components/layout/top-navbar';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { formatINR, formatPercent } from '@alphadesk/shared-utils';
-import { TrendingUp, TrendingDown, Activity, DollarSign, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { TrendingUp, DollarSign, ArrowUpRight, ArrowDownRight, Activity } from 'lucide-react';
 
 const mockPortfolioData = {
   totalValue: 1250000,
