@@ -4,6 +4,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AppLayout from './app/App';
 import Dashboard from './features/dashboard/Dashboard';
+import LoginPage from './features/auth/LoginPage';
+import MarketPage from './features/market/MarketPage';
+import StocksPage from './features/stocks/StocksPage';
+import WatchlistsPage from './features/watchlists/WatchlistsPage';
+import PortfolioPage from './features/portfolio/PortfolioPage';
+import ScreenerPage from './features/screener/ScreenerPage';
 import './styles/globals.css';
 
 const queryClient = new QueryClient({
@@ -21,18 +27,19 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<AppLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="market" element={<PlaceholderPage title="Market" />} />
-            <Route path="stocks" element={<PlaceholderPage title="Stocks" />} />
-            <Route path="screener" element={<PlaceholderPage title="Screener" />} />
+            <Route path="market" element={<MarketPage />} />
+            <Route path="stocks" element={<StocksPage />} />
+            <Route path="screener" element={<ScreenerPage />} />
             <Route path="charts" element={<PlaceholderPage title="Charts" />} />
             <Route path="relative-strength" element={<PlaceholderPage title="Relative Strength" />} />
-            <Route path="watchlists" element={<PlaceholderPage title="Watchlists" />} />
+            <Route path="watchlists" element={<WatchlistsPage />} />
             <Route path="setups" element={<PlaceholderPage title="Trade Setups" />} />
             <Route path="paper-trading" element={<PlaceholderPage title="Paper Trading" />} />
-            <Route path="portfolio" element={<PlaceholderPage title="Portfolio" />} />
+            <Route path="portfolio" element={<PortfolioPage />} />
             <Route path="analytics" element={<PlaceholderPage title="Analytics" />} />
             <Route path="strategies" element={<PlaceholderPage title="Strategies" />} />
             <Route path="backtesting" element={<PlaceholderPage title="Backtesting" />} />
