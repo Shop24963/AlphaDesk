@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { PerformanceMetric } from './performance-metric.model.js';
 import { Trade } from '../trading/trade.model.js';
 import { AuthRequest } from '../../middleware/auth.middleware.js';
+import { calculatePortfolioAnalytics, saveAnalytics, getAnalyticsHistory } from './analytics.service.js';
 
 interface AnalyticsQueryParams {
   period?: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly';
@@ -274,6 +275,77 @@ export class AnalyticsController {
       res.json({
         success: true,
         data: equityCurve,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Get portfolio analytics with risk metrics
+   */
+  async getPortfolioAnalytics(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      if (!req.user?._id) {
+        return res.status(401).json({ success: false, message: 'Unauthorized' });
+      }
+
+      const metrics = await calculatePortfolioAnalytics(req.user._id.toString());
+      
+      res.json({
+        success: true,
+        data: metrics,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Get analytics history
+   */
+  async getAnalyticsHistory(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      if (!req.user?._id) {
+        return res.status(401).json({ success: false, message: 'Unauthorized' });
+      }
+
+      const { type, limit } = req.query;
+      const history = await getAnalyticsHistory(
+        req.user._id.toString(),
+        type as string,
+        limit ? parseInt(limit as string) : 30
+      );
+
+      res.json({
+        success: true,
+        data: history,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Save custom analytics
+   */
+  async saveAnalytics(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      if (!req.user?._id) {
+        return res.status(401).json({ success: false, message: 'Unauthorized' });
+      }
+
+      const { type, metrics, period } = req.body;
+      const analytics = await saveAnalytics(
+        req.user._id.toString(),
+        type,
+        metrics,
+        period
+      );
+
+      res.status(201).json({
+        success: true,
+        data: analytics,
       });
     } catch (error) {
       next(error);

@@ -4,6 +4,9 @@ import { createApp } from '@/app.js';
 import { connectDatabase } from '@/database/connection.js';
 import { connectRedis } from '@/database/redis.js';
 import { socketService } from '@/sockets/socket.service.js';
+import { setupMarketSockets, setupPortfolioSockets, setupAlertSockets } from '@/sockets/market.socket.js';
+import { startScheduledTasks, stopScheduledTasks } from '@/modules/jobs/scheduler.js';
+import { closeQueues } from '@/modules/jobs/queues.js';
 import { logger } from '@/common/logger.js';
 
 async function bootstrap(): Promise<void> {
@@ -17,8 +20,8 @@ async function bootstrap(): Promise<void> {
 
     // Connect to Redis
     await connectRedis().catch(err => {
-      logger.warn('Redis connection failed, continuing without Redis', { 
-        error: err instanceof Error ? err.message : err 
+      logger.warn('Redis connection failed, continuing without Redis', {
+        error: err instanceof Error ? err.message : err
       });
     });
 
@@ -30,6 +33,14 @@ async function bootstrap(): Promise<void> {
 
     // Initialize Socket.IO
     socketService.init(server);
+    
+    // Setup specialized socket namespaces
+    setupMarketSockets(socketService.getIo());
+    setupPortfolioSockets(socketService.getIo());
+    setupAlertSockets(socketService.getIo());
+
+    // Start scheduled tasks
+    startScheduledTasks();
 
     // Start server
     const PORT = env.PORT;
@@ -39,6 +50,8 @@ async function bootstrap(): Promise<void> {
       logger.info(`📡 Environment: ${env.NODE_ENV}`);
       logger.info(`🌐 CORS Origin: ${env.CORS_ORIGIN}`);
       logger.info(`🔌 WebSocket: Enabled`);
+      logger.info(`📊 Job Queues: Enabled`);
+      logger.info(`⏰ Scheduled Tasks: Started`);
     });
 
     // Graceful shutdown
@@ -49,6 +62,12 @@ async function bootstrap(): Promise<void> {
         server.close(async () => {
           logger.info('👋 HTTP server closed');
 
+          // Stop scheduled tasks
+          stopScheduledTasks();
+          
+          // Close job queues
+          await closeQueues();
+
           // Close database connections
           const mongoose = await import('mongoose');
           await mongoose.default.disconnect();
@@ -57,6 +76,7 @@ async function bootstrap(): Promise<void> {
           // Close Redis connection
           const redis = await import('@/database/redis.js');
           await redis.disconnectRedis();
+          logger.info('👋 Redis disconnected');
 
           process.exit(0);
         });
